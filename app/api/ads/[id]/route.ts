@@ -65,7 +65,7 @@ export async function GET(
       WHERE a.id = ${adId}
     `;
 
-    const ad = (result?.rows?.[0] || result?.[0]);
+    const ad = result?.[0];
     if (!ad) {
       return NextResponse.json({ error: 'Ad not found' }, { status: 404 });
     }
@@ -91,7 +91,7 @@ export async function GET(
           
           const productResults = await Promise.all(productPromises);
           products = productResults
-            .map(result => result?.rows?.[0] || result?.[0])
+            .map(result => result?.[0])
             .filter(product => product) // Remove nulls
             .map((product: any) => {
               // Build images array
