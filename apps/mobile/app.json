@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "EzyShop",
+    "slug": "ezyshop",
+    "scheme": "mobile-app",
+    "version": "1.2.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ezypzy.ezyshop",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.ezypzy.ezyshop"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false,
+        "sitemap": false
+      },
+      "eas": {
+        "projectId": "c9e70956-5a10-4656-aeae-1f5d7a6a7506"
+      }
+    },
+    "sdkVersion": "54.0.0",
+    "owner": "appgencom"
+  }
+}
