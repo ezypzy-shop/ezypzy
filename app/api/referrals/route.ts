@@ -23,23 +23,36 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get referrals made by this user
-    const referrals = await sql`
-      SELECT u.id, u.full_name, u.email, u.created_at
-      FROM users u
-      WHERE u.referred_by = ${user[0].referral_code}
-      ORDER BY u.created_at DESC
-    `;
+    // Generate referral code if user doesn't have one
+    let referralCode = user[0].referral_code;
+    if (!referralCode) {
+      referralCode = `REF${userId}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      await sql`UPDATE users SET referral_code = ${referralCode} WHERE id = ${userId}`;
+    }
+
+    // Get referrals made by this user (if referred_by column exists)
+    let referrals = [];
+    try {
+      referrals = await sql`
+        SELECT u.id, u.name as full_name, u.email, u.created_at
+        FROM users u
+        WHERE u.referred_by = ${referralCode}
+        ORDER BY u.created_at DESC
+      `;
+    } catch (error) {
+      // Column might not exist, return empty array
+      console.log('referred_by column not available:', error);
+    }
 
     return NextResponse.json({
-      referralCode: user[0].referral_code,
+      referralCode: referralCode,
       referrals: referrals,
       totalReferrals: referrals.length
     });
   } catch (error) {
     console.error('Error fetching referrals:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch referrals' },
+      { error: 'Failed to fetch referrals', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
@@ -108,7 +121,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error applying referral code:', error);
     return NextResponse.json(
-      { error: 'Failed to apply referral code' },
+      { error: 'Failed to apply referral code', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

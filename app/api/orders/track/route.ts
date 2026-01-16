@@ -4,7 +4,8 @@ import sql from '../../utils/sql';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const orderNumber = searchParams.get('order_number');
+    // Support both orderNumber (camelCase) and order_number (snake_case) for backwards compatibility
+    const orderNumber = searchParams.get('orderNumber') || searchParams.get('order_number');
     
     if (!orderNumber) {
       return NextResponse.json({ error: 'Order number is required' }, { status: 400 });
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
     
     // Find order by order number (case insensitive)
     const orders = await sql`
-      SELECT o.*, b.name as business_name, b.image as business_image
+      SELECT o.*, b.name as business_name, b.image as business_image, b.user_id as business_owner_id
       FROM orders o
       LEFT JOIN businesses b ON o.business_id = b.id
       WHERE UPPER(o.order_number) = UPPER(${orderNumber})

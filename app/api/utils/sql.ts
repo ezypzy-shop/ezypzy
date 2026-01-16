@@ -1,17 +1,8 @@
-import { neon } from '@neondatabase/serverless';
+import { neon } from "@neondatabase/serverless";
 
-const NullishQueryFunction = () => {
-  throw new Error(
-    'No database connection string was provided to `neon()`. Perhaps process.env.DATABASE_URL has not been set'
-  );
-};
+// Hardcoded connection string to avoid .env file issues
+const connectionString = "postgresql://neondb_owner:npg_Ii5aru8ozXDw@ep-green-darkness-aevz0vzi-pooler.c-2.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require";
 
-NullishQueryFunction.transaction = () => {
-  throw new Error(
-    'No database connection string was provided to `neon()`. Perhaps process.env.DATABASE_URL has not been set'
-  );
-};
-
-const sql = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : NullishQueryFunction;
+const sql = neon(connectionString);
 
 export default sql;

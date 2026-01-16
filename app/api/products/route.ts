@@ -4,7 +4,8 @@ import sql from '../utils/sql';
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const businessId = searchParams.get('businessId');
+    // Accept both businessId and business_id for compatibility
+    const businessId = searchParams.get('businessId') || searchParams.get('business_id');
     const category = searchParams.get('category');
     const search = searchParams.get('search');
     const featured = searchParams.get('featured');
