@@ -93,8 +93,8 @@ export async function GET(
           
           const productResults = await Promise.all(productPromises);
           products = productResults
-            .map(result => result[0])
-            .filter(product => product) // Remove nulls
+            .map((result: any) => result[0])
+            .filter((product: any) => product) // Remove nulls
             .map((product: any) => {
               // Build images array
               const allImages: string[] = [];
