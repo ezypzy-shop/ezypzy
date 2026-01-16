@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get referrals made by this user (if referred_by column exists)
-    let referrals = [];
+    let referrals: any[] = [];
     try {
       referrals = await sql`
         SELECT u.id, u.name as full_name, u.email, u.created_at
