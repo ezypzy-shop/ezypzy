@@ -72,11 +72,11 @@ export async function GET(
     }
 
     // Fetch products for this ad if product_ids exist
-    let products = [];
+    let products: any[] = [];
     try {
       if (ad.product_ids) {
         // Parse product_ids
-        let productIds = [];
+        let productIds: number[] = [];
         if (typeof ad.product_ids === 'string') {
           productIds = JSON.parse(ad.product_ids);
         } else if (Array.isArray(ad.product_ids)) {
